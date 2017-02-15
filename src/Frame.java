@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.File;
 
 public class Frame extends JFrame{
     private Game game;
@@ -27,14 +30,25 @@ public class Frame extends JFrame{
         }
         updateField();
         this.setVisible(true);
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                game.move(e.getKeyCode());
+            }
+        });
     }
 
     public void updateField(){
+        File file = new File("img/" + Integer.toString(128) + ".png");
+        System.out.println(file.getAbsolutePath());
         for(int i = 0; i < game.size; i++){
             for(int j = 0; j < game.size; j++){
                 int value = game.field[i][j];
-                labelsField[i][j].setIcon(new ImageIcon("./img/" + Integer.toString(value) + ".png"));
+                labelsField[i][j].setIcon(new ImageIcon("img/" + Integer.toString(value) + ".png"));
             }
         }
     }
+
+
 }
