@@ -1,3 +1,5 @@
+import javax.swing.*;
+
 import static java.awt.event.KeyEvent.*;
 
 public class Game
@@ -8,13 +10,7 @@ public class Game
 
     public Game()
     {
-        for (int  i = 0; i < size; i++)
-        {
-            for(int j = 0; j < size; j++)
-            {
-                field[i][j] = 0;
-            }
-        }
+        init();
     }
 
     int getRandomNum()
@@ -207,6 +203,56 @@ public class Game
                 }
                 break;
         }
+
+        int accumulate = 0;
+        boolean complete = true;
+
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(field[row][col] != 0)
+                {
+                    accumulate++;
+                }
+
+                if(row > 0)
+                {
+                    if(field[row][col] == field[row - 1][col])
+                    {
+                        complete = false;
+                    }
+                }
+                if(row < size - 1)
+                {
+                    if(field[row][col] == field[row + 1][col])
+                    {
+                        complete = false;
+                    }
+                }
+                if(col > 0)
+                {
+                    if(field[row][col] == field[row][col - 1])
+                    {
+                        complete = false;
+                    }
+                }
+                if(col < size - 1)
+                {
+                    if(field[row][col] == field[row][col + 1])
+                    {
+                        complete = false;
+                    }
+                }
+            }
+        }
+
+        if(accumulate == 16 && complete){
+            JOptionPane.showMessageDialog(Start.frame, "Вы проиграли!");
+            Start.start();
+            return;
+        }
+
         boolean changed = false;
         for(int i = 0; i < size; i++)
         {
@@ -218,7 +264,9 @@ public class Game
                 }
                 if(field[i][j] == 2048)
                 {
-                    over = true;
+                    Start.frame.updateField();
+                    JOptionPane.showMessageDialog(Start.frame, "Вы победили!");
+                    Start.start();
                     return;
                 }
             }
@@ -229,8 +277,16 @@ public class Game
         }
     }
 
-    void start()
+    void init()
     {
+        for (int  i = 0; i < size; i++)
+        {
+            for(int j = 0; j < size; j++)
+            {
+                field[i][j] = 0;
+            }
+        }
+
         create();
         create();
     }
